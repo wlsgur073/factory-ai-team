@@ -3,17 +3,16 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Package, Settings } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { DynamicIcon } from "@/lib/icons";
 import {
+  cn,
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { categories, getSolutionsByCategory } from "@/config/solutions";
+  ScrollArea,
+  Separator,
+} from "@nexus/ui";
+import { DynamicIcon, categories, getSolutionsByCategory } from "@nexus/config";
 
 type MobileSidebarProps = {
   open: boolean;

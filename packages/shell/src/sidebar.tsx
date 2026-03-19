@@ -3,11 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Package, Settings } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { DynamicIcon } from "@/lib/icons";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { categories, getSolutionsByCategory } from "@/config/solutions";
+import { cn, ScrollArea, Separator } from "@nexus/ui";
+import { DynamicIcon, categories, getSolutionsByCategory } from "@nexus/config";
 
 type SidebarProps = {
   collapsed: boolean;

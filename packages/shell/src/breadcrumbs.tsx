@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight, Home } from "lucide-react";
-import { getSolutionBySlug } from "@/config/solutions";
+import { getSolutionBySlug } from "@nexus/config";
 
 const routeLabels: Record<string, string> = {
   solutions: "솔루션",

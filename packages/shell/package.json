@@ -1,0 +1,18 @@
+{
+  "name": "@nexus/shell",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@nexus/ui": "workspace:*",
+    "@nexus/config": "workspace:*",
+    "@nexus/types": "workspace:*",
+    "lucide-react": "^0.577.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "next": "^16.0.0"
+  }
+}
