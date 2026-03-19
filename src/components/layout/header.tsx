@@ -1,0 +1,48 @@
+"use client";
+
+import { Waypoints, Menu, Search, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+type HeaderProps = {
+  onToggleSidebar: () => void;
+};
+
+export function Header({ onToggleSidebar }: HeaderProps) {
+  return (
+    <header className="sticky top-0 z-50 flex h-14 items-center gap-4 border-b bg-background px-4">
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={onToggleSidebar}
+        className="shrink-0"
+      >
+        <Menu className="h-5 w-5" />
+        <span className="sr-only">사이드바 토글</span>
+      </Button>
+
+      <div className="flex items-center gap-2">
+        <Waypoints className="h-6 w-6 text-primary" />
+        <span className="hidden text-lg font-semibold sm:inline-block">
+          Nexus
+        </span>
+      </div>
+
+      <div className="ml-auto flex items-center gap-4">
+        <div className="relative hidden md:block">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="솔루션 검색..."
+            className="w-64 pl-8"
+          />
+        </div>
+
+        <Button variant="ghost" size="icon">
+          <User className="h-5 w-5" />
+          <span className="sr-only">사용자 메뉴</span>
+        </Button>
+      </div>
+    </header>
+  );
+}
