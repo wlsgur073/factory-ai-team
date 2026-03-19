@@ -1,0 +1,119 @@
+# Nexus 개발 명세서
+
+> 이 문서는 Agent Team의 공유 컨텍스트로, 각 에이전트가 참조하는 비즈니스/기술 명세입니다.
+> CLAUDE.md에서 `@docs/dev-spec.md`로 참조됩니다.
+
+---
+
+## 1. 데이터 모델
+
+### 1.1 Solution (솔루션)
+
+> `packages/types/`에 정의된 핵심 타입
+
+| 필드        | 타입                               | 설명                            |
+| ----------- | ---------------------------------- | ------------------------------- |
+| id          | string                             | 솔루션 고유 식별자 (kebab-case) |
+| name        | string                             | 솔루션 표시 이름                |
+| description | string                             | 솔루션 설명                     |
+| category    | Category                           | 솔루션 카테고리                 |
+| status      | "active" \| "preview" \| "planned" | 솔루션 상태                     |
+| icon        | string                             | lucide-react 아이콘 이름        |
+| href        | string                             | 솔루션 진입 경로                |
+
+<!-- TODO: 실제 타입 정의와 동기화 필요 -->
+
+### 1.2 Category (카테고리)
+
+| 필드                              | 타입 | 설명 |
+| --------------------------------- | ---- | ---- |
+| <!-- TODO: 카테고리 필드 정의 --> |      |      |
+
+### 1.3 Codex 도메인 모델
+
+<!-- TODO: Codex 솔루션의 비즈니스 도메인 모델 정의 -->
+<!-- 예: DataAsset, DataCatalog, DataLineage, DataQualityRule 등 -->
+
+---
+
+## 2. 페이지 명세
+
+### 2.1 Platform (apps/platform)
+
+| 경로              | 페이지명         | 설명                                   | 상태         |
+| ----------------- | ---------------- | -------------------------------------- | ------------ |
+| `/`               | Command Center   | 대시보드 — 솔루션 현황 요약, 최근 활동 | 구현됨       |
+| `/solutions`      | Solution Catalog | 솔루션 목록 — 카테고리별 필터, 검색    | 구현됨       |
+| `/solutions/[id]` | Solution Detail  | 솔루션 상세 — 설명, 상태, 진입         | 구현됨       |
+| `/settings`       | Settings         | 플랫폼 설정                            | 플레이스홀더 |
+
+<!-- TODO: 각 페이지의 상세 요구사항 추가 -->
+
+### 2.2 Codex (solutions/codex/web)
+
+| 경로               | 페이지명   | 설명           | 상태   |
+| ------------------ | ---------- | -------------- | ------ |
+| `/solutions/codex` | Codex Home | Codex 대시보드 | 미구현 |
+
+<!-- TODO: Codex 페이지 명세 추가 -->
+
+---
+
+## 3. API 명세
+
+> 현재 Nexus는 프론트엔드 전용 프로젝트로 별도 백엔드 API가 없습니다.
+> 향후 API가 추가될 경우 아래 형식으로 문서화합니다.
+
+<!-- TODO: 필요 시 API 엔드포인트 명세 추가 -->
+
+---
+
+## 4. 비즈니스 규칙
+
+### 4.1 솔루션 관리
+
+- 솔루션 등록은 `packages/config/src/solutions.ts`의 `solutions` 배열에 항목을 추가하면 카탈로그, 사이드바, 상세 페이지에 자동 반영
+- 솔루션 status별 동작:
+  - `active`: 진입 가능, 정상 표시
+  - `preview`: 진입 가능, "미리보기" 배지 표시
+  - `planned`: 진입 불가, "예정" 배지 표시
+
+### 4.2 등록 솔루션 목록
+
+| 솔루션            | 상태    | 카테고리          |
+| ----------------- | ------- | ----------------- |
+| Codex             | active  | 데이터 거버넌스   |
+| AI Factory        | planned | AI/ML             |
+| Data Pipeline     | planned | 데이터 엔지니어링 |
+| CI/CD Hub         | planned | DevOps            |
+| Insight Dashboard | planned | 분석              |
+| LLM Gateway       | planned | AI/ML             |
+
+### 4.3 네비게이션
+
+- 사이드바: active/preview 솔루션만 표시
+- 브레드크럼: 플랫폼 > [솔루션명] > [페이지명]
+- 인증: 미구현 (향후 추가 예정)
+
+---
+
+## 5. 디자인 가이드라인
+
+### 5.1 테마
+
+- 다크 모드 기본
+- Tailwind CSS v4 `@theme inline` 블록으로 커스텀 색상 정의
+- shadcn/ui `base-nova` 스타일 사용
+
+### 5.2 레이아웃
+
+- PlatformShell: Header + Sidebar + Main Content 구조
+- 솔루션 앱도 PlatformShell로 래핑하여 일관된 네비게이션 제공
+
+<!-- TODO: 와이어프레임 또는 Figma 링크 추가 -->
+
+---
+
+## 6. 향후 계획
+
+<!-- TODO: 마일스톤 및 우선순위 로드맵 추가 -->

@@ -7,6 +7,7 @@
 - **기술 스택**: Next.js 16 (App Router), React 19, TypeScript 5.x, Tailwind CSS v4, shadcn/ui (base-nova)
 - **주요 의존성**: lucide-react (아이콘), @base-ui/react (UI 프리미티브), class-variance-authority, tailwind-merge
 - **아키텍처**: Turborepo 모노레포 — 플랫폼 셸 + 솔루션 플러그인 구조 (Backstage 참고)
+- **개발 명세**: @docs/dev-spec.md
 
 ## 빌드 및 실행
 
