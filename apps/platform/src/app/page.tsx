@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { ArrowRight, Package, Activity, Server } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { DynamicIcon } from "@/lib/icons";
-import { solutions } from "@/config/solutions";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Button,
+} from "@nexus/ui";
+import { DynamicIcon, solutions } from "@nexus/config";
 
 const statusLabel: Record<string, string> = {
   active: "활성",

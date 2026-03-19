@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { DynamicIcon } from "@/lib/icons";
-import type { Solution } from "@/types/solution";
-import { getCategoryById } from "@/config/solutions";
+import { Card, CardContent, CardHeader, CardTitle, Badge } from "@nexus/ui";
+import { DynamicIcon, getCategoryById } from "@nexus/config";
+import type { Solution } from "@nexus/types";
 
 const statusLabel: Record<string, string> = {
   active: "활성",

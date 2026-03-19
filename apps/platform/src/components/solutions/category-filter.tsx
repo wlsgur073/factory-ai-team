@@ -1,9 +1,7 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { DynamicIcon } from "@/lib/icons";
-import { categories } from "@/config/solutions";
+import { cn, Button } from "@nexus/ui";
+import { DynamicIcon, categories } from "@nexus/config";
 
 type CategoryFilterProps = {
   selected: string | null;

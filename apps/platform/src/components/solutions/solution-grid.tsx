@@ -1,4 +1,4 @@
-import type { Solution } from "@/types/solution";
+import type { Solution } from "@nexus/types";
 import { SolutionCard } from "./solution-card";
 
 export function SolutionGrid({ solutions }: { solutions: Solution[] }) {

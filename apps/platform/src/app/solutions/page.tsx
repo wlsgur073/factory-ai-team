@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@nexus/ui";
 import { SolutionGrid } from "@/components/solutions/solution-grid";
 import { CategoryFilter } from "@/components/solutions/category-filter";
-import { solutions } from "@/config/solutions";
+import { solutions } from "@nexus/config";
 
 export default function SolutionsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -43,7 +43,9 @@ export default function SolutionsPage() {
             type="search"
             placeholder="검색..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchQuery(e.target.value)
+            }
             className="pl-8"
           />
         </div>

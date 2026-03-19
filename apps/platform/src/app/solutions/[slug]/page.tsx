@@ -1,15 +1,20 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Clock, CheckCircle2 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { DynamicIcon } from "@/lib/icons";
 import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Button,
+} from "@nexus/ui";
+import {
+  DynamicIcon,
   getSolutionBySlug,
   getCategoryById,
   solutions,
-} from "@/config/solutions";
+} from "@nexus/config";
 
 type Props = {
   params: Promise<{ slug: string }>;

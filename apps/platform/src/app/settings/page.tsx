@@ -1,5 +1,5 @@
 import { Settings } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@nexus/ui";
 
 export default function SettingsPage() {
   return (

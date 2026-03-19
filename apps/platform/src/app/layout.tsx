@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { PlatformShell } from "@/components/layout/platform-shell";
+import { TooltipProvider } from "@nexus/ui";
+import { PlatformShell } from "@nexus/shell";
 import "./globals.css";
 
 const geistSans = Geist({
