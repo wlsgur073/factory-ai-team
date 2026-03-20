@@ -345,7 +345,8 @@ type DraftStatus =
   | "EDITING" // 편집 중
   | "READY" // 신청 준비 완료
   | "SUBMITTED" // 신청으로 전환됨
-  | "DISCARDED"; // 폐기
+  | "DISCARDED" // 사용자 수동 폐기
+  | "EXPIRED"; // 30일 경과 자동 만료
 ```
 
 | 필드            | DB 컬럼          | 타입         | 필수 | 제약조건                                   |
@@ -357,6 +358,7 @@ type DraftStatus =
 | status          | STATUS           | VARCHAR(20)  | Y    | 기본값 'EDITING'                           |
 | authorId        | AUTHOR_ID        | BIGINT       | Y    | FK -> USER(USER_ID)                        |
 | data            | DATA             | JSON         | Y    | 초안 필드 데이터 (스키마 유연)             |
+| expiresAt       | EXPIRES_AT       | TIMESTAMP    | Y    | 생성 후 30일, 초과 시 자동 EXPIRED         |
 | changesSummary  | CHANGES_SUMMARY  | TEXT         | N    | 자동 diff 요약                             |
 | requestId       | REQUEST_ID       | BIGINT       | N    | FK -> REQUEST(REQUEST_ID), 전환 후 설정    |
 | collaboratorIds | COLLABORATOR_IDS | JSON         | N    | 사용자 ID 배열                             |
@@ -876,27 +878,32 @@ stateDiagram-v2
 
     EDITING --> EDITING : 자동 저장 / 수동 저장
     EDITING --> READY : 작성 완료 표시
-    EDITING --> DISCARDED : 폐기
+    EDITING --> DISCARDED : 수동 폐기
+    EDITING --> EXPIRED : 30일 경과
 
     READY --> EDITING : 추가 편집
     READY --> SUBMITTED : 신청으로 전환
-    READY --> DISCARDED : 폐기
+    READY --> DISCARDED : 수동 폐기
+    READY --> EXPIRED : 30일 경과
 
     SUBMITTED --> [*] : Request 건 생성 완료
 
-    note right of EDITING : 협업자 초대 가능\n코멘트 작성 가능
+    note right of EDITING : 협업자 초대 가능\n코멘트 작성 가능\n최대 10건 제한
     note right of SUBMITTED : REQUEST 테이블에\n새 건 생성 후 연결
+    note right of EXPIRED : 배치 스케줄러가\n자동 상태 변경
 ```
 
 **전이 규칙:**
 
-| 현재 상태 | 허용 전이 | 수행자        | 조건                    |
-| --------- | --------- | ------------- | ----------------------- |
-| EDITING   | READY     | 작성자/협업자 | 필수 필드 입력 완료     |
-| EDITING   | DISCARDED | 작성자        |                         |
-| READY     | EDITING   | 작성자/협업자 |                         |
-| READY     | SUBMITTED | 작성자        | 신청 제출, REQUEST 생성 |
-| READY     | DISCARDED | 작성자        |                         |
+| 현재 상태 | 허용 전이 | 수행자        | 조건                           |
+| --------- | --------- | ------------- | ------------------------------ |
+| EDITING   | READY     | 작성자/협업자 | 필수 필드 입력 완료            |
+| EDITING   | DISCARDED | 작성자        | 수동 폐기                      |
+| EDITING   | EXPIRED   | 시스템        | expiresAt 경과 (배치 스케줄러) |
+| READY     | EDITING   | 작성자/협업자 |                                |
+| READY     | SUBMITTED | 작성자        | 신청 제출, REQUEST 생성        |
+| READY     | DISCARDED | 작성자        | 수동 폐기                      |
+| READY     | EXPIRED   | 시스템        | expiresAt 경과 (배치 스케줄러) |
 
 ### 4.3 검증(Validation) 상태 전이
 
@@ -1282,7 +1289,7 @@ interface InlineEditResponse {
 
 **데이터 플로우:**
 
-```
+```markdown
 1. 사용자가 상세 페이지에서 "편집" 클릭
 2. POST /api/inline-governance/edit -> Draft(EDITING) 생성
 3. 사용자가 필드를 수정할 때마다:
@@ -1341,22 +1348,22 @@ interface InlineSubmitResponse {
 
 > Pillar 5 (초안 & 협업) -- Draft CRUD 및 협업 기능.
 
-| Method | Path                                      | 설명                  | 권한          |
-| ------ | ----------------------------------------- | --------------------- | ------------- |
-| GET    | `/api/drafts`                             | 내 초안 목록          | 신청자 이상   |
-| POST   | `/api/drafts`                             | 초안 생성             | 신청자 이상   |
-| GET    | `/api/drafts/{id}`                        | 초안 상세             | 작성자/협업자 |
-| PUT    | `/api/drafts/{id}`                        | 초안 전체 저장        | 작성자/협업자 |
-| PATCH  | `/api/drafts/{id}/status`                 | 초안 상태 변경        | 작성자        |
-| DELETE | `/api/drafts/{id}`                        | 초안 삭제 (DISCARDED) | 작성자        |
-| POST   | `/api/drafts/{id}/collaborators`          | 협업자 초대           | 작성자        |
-| DELETE | `/api/drafts/{id}/collaborators/{userId}` | 협업자 제거           | 작성자        |
-| POST   | `/api/drafts/{id}/submit`                 | 초안 -> 신청 전환     | 작성자        |
-| GET    | `/api/comments`                           | 코멘트 목록           | 작성자/협업자 |
-| POST   | `/api/comments`                           | 코멘트 작성           | 신청자 이상   |
-| PUT    | `/api/comments/{id}`                      | 코멘트 수정           | 작성자 본인   |
-| DELETE | `/api/comments/{id}`                      | 코멘트 삭제           | 작성자 본인   |
-| PATCH  | `/api/comments/{id}/resolve`              | 코멘트 해결 처리      | 작성자/협업자 |
+| Method | Path                                      | 설명                                        | 권한          |
+| ------ | ----------------------------------------- | ------------------------------------------- | ------------- |
+| GET    | `/api/drafts`                             | 내 초안 목록                                | 신청자 이상   |
+| POST   | `/api/drafts`                             | 초안 생성 (사용자당 최대 10건, 초과 시 422) | 신청자 이상   |
+| GET    | `/api/drafts/{id}`                        | 초안 상세                                   | 작성자/협업자 |
+| PUT    | `/api/drafts/{id}`                        | 초안 전체 저장                              | 작성자/협업자 |
+| PATCH  | `/api/drafts/{id}/status`                 | 초안 상태 변경                              | 작성자        |
+| DELETE | `/api/drafts/{id}`                        | 초안 삭제 (DISCARDED)                       | 작성자        |
+| POST   | `/api/drafts/{id}/collaborators`          | 협업자 초대                                 | 작성자        |
+| DELETE | `/api/drafts/{id}/collaborators/{userId}` | 협업자 제거                                 | 작성자        |
+| POST   | `/api/drafts/{id}/submit`                 | 초안 -> 신청 전환                           | 작성자        |
+| GET    | `/api/comments`                           | 코멘트 목록                                 | 작성자/협업자 |
+| POST   | `/api/comments`                           | 코멘트 작성                                 | 신청자 이상   |
+| PUT    | `/api/comments/{id}`                      | 코멘트 수정                                 | 작성자 본인   |
+| DELETE | `/api/comments/{id}`                      | 코멘트 삭제                                 | 작성자 본인   |
+| PATCH  | `/api/comments/{id}/resolve`              | 코멘트 해결 처리                            | 작성자/협업자 |
 
 **POST `/api/drafts`**
 
@@ -1718,11 +1725,11 @@ interface AuditTimelineResponse {
 | Method | Path                                 | 설명                 | 권한                                                                                                                    |
 | ------ | ------------------------------------ | -------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | GET    | `/api/governance/compliance`         | 유형별 준수율 게이지 | 거버넌스 권한 (관리자/승인자/스튜어드). 단, 신청자 대시보드 미니 게이지용으로 `/api/dashboard/stats`에 요약 준수율 포함 |
-| GET    | `/api/governance/kpi`                | KPI 지표             | 승인자 이상                                                                                                             |
+| GET    | `/api/governance/kpi`                | KPI 지표             | 거버넌스 권한 (관리자/승인자/스튜어드)                                                                                  |
 | GET    | `/api/governance/trend`              | 월별 표준화율 추이   | 거버넌스 권한 (관리자/승인자/스튜어드)                                                                                  |
-| GET    | `/api/governance/department-ranking` | 부서별 준수율 랭킹   | 승인자 이상                                                                                                             |
-| GET    | `/api/governance/non-compliant`      | 미준수 항목 Top N    | 승인자 이상                                                                                                             |
-| GET    | `/api/governance/report/pdf`         | PDF 리포트 생성      | 승인자 이상                                                                                                             |
+| GET    | `/api/governance/department-ranking` | 부서별 준수율 랭킹   | 거버넌스 권한 (관리자/승인자/스튜어드)                                                                                  |
+| GET    | `/api/governance/non-compliant`      | 미준수 항목 Top N    | 거버넌스 권한 (관리자/승인자/스튜어드)                                                                                  |
+| GET    | `/api/governance/report/pdf`         | PDF 리포트 생성      | 거버넌스 권한 (관리자/승인자/스튜어드)                                                                                  |
 
 **GET `/api/governance/compliance`**
 
@@ -1773,7 +1780,7 @@ interface GovernanceKpi {
 | 초안 & 협업          |      15       | Pillar 5 |
 | 검증                 |       7       | -        |
 | AI Data Butler       |       7       | Pillar 3 |
-| 공통코드             |       9       | -        |
+| 공통코드             |      10       | -        |
 | 사용자 관리          |       4       | -        |
 | 권한 관리            |       2       | -        |
 | 시스템 코드          |       4       | -        |
@@ -1781,7 +1788,7 @@ interface GovernanceKpi {
 | 알림                 |       6       | Pillar 6 |
 | 감사 추적            |       2       | -        |
 | 거버넌스 포털        |       6       | Pillar 4 |
-| **합계**             |    **117**    |          |
+| **합계**             |    **118**    |          |
 
 ---
 
@@ -1925,7 +1932,7 @@ interface GovernanceKpi {
 
 **마이그레이션 순서:**
 
-```
+```markdown
 Phase 1: 신규 테이블 생성 (DRAFT, COMMENT, NOTIFICATION, DATABASE_CONNECTION)
 Phase 2: 기존 테이블에 감사 필드 추가 (ALTER TABLE ADD COLUMN)
 Phase 3: 기존 데이터 백필 (UPDATE SET createdAt = regDate 등)
