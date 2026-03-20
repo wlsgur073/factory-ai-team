@@ -84,8 +84,15 @@ factory-ai-team/
 - **경로 별칭**: 앱 내부에서만 `@/*` → `./src/*` (tsconfig paths). 패키지 간 참조는 `@nexus/*`
 - **패키지 의존성, 아키텍처 규칙**: `.claude/rules/architecture.md` 참조
 
+## Git 워크플로우
+
+- 구현 작업은 main 브랜치에서 직접 하지 말 것 — `feat/<작업명>` 브랜치 생성 후 작업
+- main 브랜치 merge/push: 사용자 승인 필요
+
 ## Claude 워크플로우
 
 - **구현 시작 전**: `.claude/rules/` 디렉토리의 모든 규칙 문서를 확인하고 따를 것
+- **다중 Phase 구현 계획 실행 시**: team-leader 에이전트에게 위임할 것
+- **구현 완료 시**: 해당 솔루션/패키지의 CLAUDE.md "현재 구현 상태" 섹션을 갱신할 것
 - Before each task: run `superpowers:brainstorming`
 - When creating or modifying frontend UI components/pages: run `frontend-design:frontend-design` skill
