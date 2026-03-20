@@ -11,28 +11,28 @@
 
 > `packages/types/`에 정의된 핵심 타입
 
-| 필드        | 타입                               | 설명                            |
-| ----------- | ---------------------------------- | ------------------------------- |
-| id          | string                             | 솔루션 고유 식별자 (kebab-case) |
-| name        | string                             | 솔루션 표시 이름                |
-| description | string                             | 솔루션 설명                     |
-| category    | Category                           | 솔루션 카테고리                 |
-| status      | "active" \| "preview" \| "planned" | 솔루션 상태                     |
-| icon        | string                             | lucide-react 아이콘 이름        |
-| href        | string                             | 솔루션 진입 경로                |
-
-<!-- TODO: 실제 타입 정의와 동기화 필요 -->
+| 필드        | 타입                                | 설명                            |
+| ----------- | ----------------------------------- | ------------------------------- |
+| id          | string                              | 솔루션 고유 식별자 (kebab-case) |
+| slug        | string                              | URL 경로용 식별자               |
+| name        | string                              | 솔루션 표시 이름                |
+| description | string                              | 솔루션 설명                     |
+| icon        | string                              | lucide-react 아이콘 이름        |
+| category    | string                              | 카테고리 ID 참조                |
+| status      | "active" \| "beta" \| "coming-soon" | 솔루션 상태                     |
+| route       | string                              | 솔루션 진입 경로                |
 
 ### 1.2 Category (카테고리)
 
-| 필드                              | 타입 | 설명 |
-| --------------------------------- | ---- | ---- |
-| <!-- TODO: 카테고리 필드 정의 --> |      |      |
+| 필드 | 타입   | 설명                     |
+| ---- | ------ | ------------------------ |
+| id   | string | 카테고리 고유 식별자     |
+| name | string | 카테고리 표시 이름       |
+| icon | string | lucide-react 아이콘 이름 |
 
 ### 1.3 Codex 도메인 모델
 
-<!-- TODO: Codex 솔루션의 비즈니스 도메인 모델 정의 -->
-<!-- 예: DataAsset, DataCatalog, DataLineage, DataQualityRule 등 -->
+> 상세 도메인 모델은 `solutions/codex/docs/codex-개발지시서.md` 참조
 
 ---
 
@@ -75,23 +75,23 @@
 - 솔루션 등록은 `packages/config/src/solutions.ts`의 `solutions` 배열에 항목을 추가하면 카탈로그, 사이드바, 상세 페이지에 자동 반영
 - 솔루션 status별 동작:
   - `active`: 진입 가능, 정상 표시
-  - `preview`: 진입 가능, "미리보기" 배지 표시
-  - `planned`: 진입 불가, "예정" 배지 표시
+  - `beta`: 진입 가능, "베타" 배지 표시
+  - `coming-soon`: 진입 불가, "예정" 배지 표시
 
 ### 4.2 등록 솔루션 목록
 
-| 솔루션            | 상태    | 카테고리          |
-| ----------------- | ------- | ----------------- |
-| Codex             | active  | 데이터 거버넌스   |
-| AI Factory        | planned | AI/ML             |
-| Data Pipeline     | planned | 데이터 엔지니어링 |
-| CI/CD Hub         | planned | DevOps            |
-| Insight Dashboard | planned | 분석              |
-| LLM Gateway       | planned | AI/ML             |
+| 솔루션            | 상태        | 카테고리  |
+| ----------------- | ----------- | --------- |
+| Codex             | active      | Data      |
+| AI Factory        | coming-soon | AI / ML   |
+| Data Pipeline     | coming-soon | Data      |
+| CI/CD Hub         | coming-soon | DevOps    |
+| Insight Dashboard | coming-soon | Analytics |
+| LLM Gateway       | beta        | AI / ML   |
 
 ### 4.3 네비게이션
 
-- 사이드바: active/preview 솔루션만 표시
+- 사이드바: active/beta 솔루션만 표시
 - 브레드크럼: 플랫폼 > [솔루션명] > [페이지명]
 - 인증: 미구현 (향후 추가 예정)
 
