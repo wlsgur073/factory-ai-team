@@ -552,7 +552,7 @@ interface User extends BaseEntity {
 type UserRole =
   | "SYSTEM_ADMIN" // 시스템관리자
   | "REVIEWER_APPROVER" // 검토/승인자
-  | "DATA_STEWARD" // 데이터스튜어드
+  | "DATA_STEWARD" // 표준 관리자
   | "REQUESTER" // 신청자
   | "READ_ONLY"; // 조회전용
 
@@ -1176,26 +1176,26 @@ interface WordDetailResponse extends StandardWord {
 
 ### 5.5 거버넌스 API (신청/승인/반려)
 
-| Method | Path                          | 설명                | 권한                |
-| ------ | ----------------------------- | ------------------- | ------------------- |
-| POST   | `/api/requests/words`         | 표준단어 신청       | 신청자 이상         |
-| POST   | `/api/requests/domains`       | 표준도메인 신청     | 신청자 이상         |
-| POST   | `/api/requests/terms`         | 표준용어 신청       | 신청자 이상         |
-| POST   | `/api/requests/common-codes`  | 공통코드 신청       | 데이터스튜어드 이상 |
-| GET    | `/api/requests`               | 전체 신청 목록      | 신청자 이상         |
-| GET    | `/api/requests/my`            | 내 신청 목록        | 신청자 이상         |
-| GET    | `/api/requests/my/stats`      | 내 신청 통계        | 신청자 이상         |
-| GET    | `/api/requests/{id}`          | 신청 상세           | 신청자 이상         |
-| GET    | `/api/requests/{id}/feedback` | 피드백 상세         | 신청자 이상         |
-| PATCH  | `/api/requests/{id}/cancel`   | 신청 취소           | 신청자 (본인 건)    |
-| POST   | `/api/requests/{type}/delete` | 삭제 신청 + 영향도  | 신청자 이상         |
-| GET    | `/api/approvals`              | 승인 대기 목록      | 승인자 이상         |
-| GET    | `/api/approvals/stats`        | 승인 통계           | 승인자 이상         |
-| GET    | `/api/approvals/{id}`         | 신청 상세 (승인 뷰) | 승인자 이상         |
-| GET    | `/api/approvals/{id}/changes` | 변경 전후 비교      | 승인자 이상         |
-| GET    | `/api/approvals/{id}/history` | 처리 이력           | 승인자 이상         |
-| POST   | `/api/approvals/{id}/process` | 승인/반려/검토요청  | 승인자 이상         |
-| POST   | `/api/approvals/batch`        | 일괄 처리           | 승인자 이상         |
+| Method | Path                          | 설명                | 권한             |
+| ------ | ----------------------------- | ------------------- | ---------------- |
+| POST   | `/api/requests/words`         | 표준단어 신청       | 신청자 이상      |
+| POST   | `/api/requests/domains`       | 표준도메인 신청     | 신청자 이상      |
+| POST   | `/api/requests/terms`         | 표준용어 신청       | 신청자 이상      |
+| POST   | `/api/requests/common-codes`  | 공통코드 신청       | 표준 관리자 이상 |
+| GET    | `/api/requests`               | 전체 신청 목록      | 신청자 이상      |
+| GET    | `/api/requests/my`            | 내 신청 목록        | 신청자 이상      |
+| GET    | `/api/requests/my/stats`      | 내 신청 통계        | 신청자 이상      |
+| GET    | `/api/requests/{id}`          | 신청 상세           | 신청자 이상      |
+| GET    | `/api/requests/{id}/feedback` | 피드백 상세         | 신청자 이상      |
+| PATCH  | `/api/requests/{id}/cancel`   | 신청 취소           | 신청자 (본인 건) |
+| POST   | `/api/requests/{type}/delete` | 삭제 신청 + 영향도  | 신청자 이상      |
+| GET    | `/api/approvals`              | 승인 대기 목록      | 승인자 이상      |
+| GET    | `/api/approvals/stats`        | 승인 통계           | 승인자 이상      |
+| GET    | `/api/approvals/{id}`         | 신청 상세 (승인 뷰) | 승인자 이상      |
+| GET    | `/api/approvals/{id}/changes` | 변경 전후 비교      | 승인자 이상      |
+| GET    | `/api/approvals/{id}/history` | 처리 이력           | 승인자 이상      |
+| POST   | `/api/approvals/{id}/process` | 승인/반려/검토요청  | 승인자 이상      |
+| POST   | `/api/approvals/batch`        | 일괄 처리           | 승인자 이상      |
 
 **POST `/api/requests/words`**
 
@@ -1405,15 +1405,15 @@ interface CreateCommentResponse {
 
 ### 5.8 검증 API
 
-| Method | Path                                        | 설명                    | 권한             |
-| ------ | ------------------------------------------- | ----------------------- | ---------------- |
-| GET    | `/api/validations/summary`                  | 위반 통계 (유형별 건수) | 모든 인증 사용자 |
-| GET    | `/api/validations/trend`                    | 월별 위반 추이          | 모든 인증 사용자 |
-| GET    | `/api/validations/rules`                    | 규칙별 위반 현황        | 모든 인증 사용자 |
-| GET    | `/api/validations/history`                  | 검증 실행 이력          | 모든 인증 사용자 |
-| POST   | `/api/validations/execute`                  | 검증 실행               | 관리자/스튜어드  |
-| GET    | `/api/validations/violations`               | 위반 항목 목록          | 모든 인증 사용자 |
-| POST   | `/api/validations/violations/batch-correct` | 일괄 시정 신청          | 신청자 이상      |
+| Method | Path                                        | 설명                    | 권한               |
+| ------ | ------------------------------------------- | ----------------------- | ------------------ |
+| GET    | `/api/validations/summary`                  | 위반 통계 (유형별 건수) | 모든 인증 사용자   |
+| GET    | `/api/validations/trend`                    | 월별 위반 추이          | 모든 인증 사용자   |
+| GET    | `/api/validations/rules`                    | 규칙별 위반 현황        | 모든 인증 사용자   |
+| GET    | `/api/validations/history`                  | 검증 실행 이력          | 모든 인증 사용자   |
+| POST   | `/api/validations/execute`                  | 검증 실행               | 관리자/표준 관리자 |
+| GET    | `/api/validations/violations`               | 위반 항목 목록          | 모든 인증 사용자   |
+| POST   | `/api/validations/violations/batch-correct` | 일괄 시정 신청          | 신청자 이상        |
 
 **POST `/api/validations/execute`**
 
@@ -1565,18 +1565,18 @@ interface GeneratePhysicalNameResponse {
 
 ### 5.10 공통코드 API
 
-| Method | Path                                  | 설명               | 권한             |
-| ------ | ------------------------------------- | ------------------ | ---------------- |
-| GET    | `/api/common-codes/groups`            | 코드그룹 목록      | 모든 인증 사용자 |
-| GET    | `/api/common-codes/groups/{id}`       | 코드그룹 상세      | 모든 인증 사용자 |
-| GET    | `/api/common-codes/groups/{id}/codes` | 그룹 내 코드 목록  | 모든 인증 사용자 |
-| POST   | `/api/common-codes/groups`            | 코드그룹 생성      | 관리자/스튜어드  |
-| PUT    | `/api/common-codes/groups/{id}`       | 코드그룹 수정      | 관리자/스튜어드  |
-| POST   | `/api/common-codes/groups/{id}/codes` | 코드 추가          | 관리자/스튜어드  |
-| PUT    | `/api/common-codes/codes/{id}`        | 코드 수정          | 관리자/스튜어드  |
-| DELETE | `/api/common-codes/codes/{id}`        | 코드 삭제          | 관리자/스튜어드  |
-| DELETE | `/api/common-codes/groups/{id}`       | 코드그룹 삭제      | 관리자/스튜어드  |
-| GET    | `/api/common-codes/search`            | 공통코드 통합 검색 | 모든 인증 사용자 |
+| Method | Path                                  | 설명               | 권한               |
+| ------ | ------------------------------------- | ------------------ | ------------------ |
+| GET    | `/api/common-codes/groups`            | 코드그룹 목록      | 모든 인증 사용자   |
+| GET    | `/api/common-codes/groups/{id}`       | 코드그룹 상세      | 모든 인증 사용자   |
+| GET    | `/api/common-codes/groups/{id}/codes` | 그룹 내 코드 목록  | 모든 인증 사용자   |
+| POST   | `/api/common-codes/groups`            | 코드그룹 생성      | 관리자/표준 관리자 |
+| PUT    | `/api/common-codes/groups/{id}`       | 코드그룹 수정      | 관리자/표준 관리자 |
+| POST   | `/api/common-codes/groups/{id}/codes` | 코드 추가          | 관리자/표준 관리자 |
+| PUT    | `/api/common-codes/codes/{id}`        | 코드 수정          | 관리자/표준 관리자 |
+| DELETE | `/api/common-codes/codes/{id}`        | 코드 삭제          | 관리자/표준 관리자 |
+| DELETE | `/api/common-codes/groups/{id}`       | 코드그룹 삭제      | 관리자/표준 관리자 |
+| GET    | `/api/common-codes/search`            | 공통코드 통합 검색 | 모든 인증 사용자   |
 
 ### 5.11 시스템 관리 API
 
@@ -1670,7 +1670,7 @@ type NotificationListResponse = PaginatedResponse<Notification>;
 | 피드백 요청 | FEEDBACK_RECEIVED      | 신청자                         | HIGH     |
 | 코멘트 추가 | COMMENT_ADDED          | 초안/신청 관련자               | NORMAL   |
 | 초안 공유   | DRAFT_SHARED           | 초대된 협업자                  | NORMAL   |
-| 검증 완료   | VALIDATION_COMPLETED   | 관리자/스튜어드                | NORMAL   |
+| 검증 완료   | VALIDATION_COMPLETED   | 관리자/표준 관리자             | NORMAL   |
 
 ### 5.13 감사 추적 API
 
@@ -1722,14 +1722,14 @@ interface AuditTimelineResponse {
 
 ### 5.14 거버넌스 포털 API
 
-| Method | Path                                 | 설명                 | 권한                                                                                                                    |
-| ------ | ------------------------------------ | -------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/api/governance/compliance`         | 유형별 준수율 게이지 | 거버넌스 권한 (관리자/승인자/스튜어드). 단, 신청자 대시보드 미니 게이지용으로 `/api/dashboard/stats`에 요약 준수율 포함 |
-| GET    | `/api/governance/kpi`                | KPI 지표             | 거버넌스 권한 (관리자/승인자/스튜어드)                                                                                  |
-| GET    | `/api/governance/trend`              | 월별 표준화율 추이   | 거버넌스 권한 (관리자/승인자/스튜어드)                                                                                  |
-| GET    | `/api/governance/department-ranking` | 부서별 준수율 랭킹   | 거버넌스 권한 (관리자/승인자/스튜어드)                                                                                  |
-| GET    | `/api/governance/non-compliant`      | 미준수 항목 Top N    | 거버넌스 권한 (관리자/승인자/스튜어드)                                                                                  |
-| GET    | `/api/governance/report/pdf`         | PDF 리포트 생성      | 거버넌스 권한 (관리자/승인자/스튜어드)                                                                                  |
+| Method | Path                                 | 설명                 | 권한                                                                                                                       |
+| ------ | ------------------------------------ | -------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/api/governance/compliance`         | 유형별 준수율 게이지 | 거버넌스 권한 (관리자/승인자/표준 관리자). 단, 신청자 대시보드 미니 게이지용으로 `/api/dashboard/stats`에 요약 준수율 포함 |
+| GET    | `/api/governance/kpi`                | KPI 지표             | 거버넌스 권한 (관리자/승인자/표준 관리자)                                                                                  |
+| GET    | `/api/governance/trend`              | 월별 표준화율 추이   | 거버넌스 권한 (관리자/승인자/표준 관리자)                                                                                  |
+| GET    | `/api/governance/department-ranking` | 부서별 준수율 랭킹   | 거버넌스 권한 (관리자/승인자/표준 관리자)                                                                                  |
+| GET    | `/api/governance/non-compliant`      | 미준수 항목 Top N    | 거버넌스 권한 (관리자/승인자/표준 관리자)                                                                                  |
+| GET    | `/api/governance/report/pdf`         | PDF 리포트 생성      | 거버넌스 권한 (관리자/승인자/표준 관리자)                                                                                  |
 
 **GET `/api/governance/compliance`**
 
@@ -1837,7 +1837,7 @@ interface GovernanceKpi {
 **검증 실행 정책:**
 
 - 자동 실행: 매일 00:00 전체 검증 (시스템 스케줄러)
-- 수동 실행: 관리자/스튜어드가 대상 범위를 지정하여 즉시 실행
+- 수동 실행: 관리자/표준 관리자가 대상 범위를 지정하여 즉시 실행
 - 신청 시 실시간 검증: 신청 폼 제출 시 해당 항목에 대해 즉시 검증 (VLD-001, VLD-002 적용)
 - 일괄 시정: 위반 항목 선택 후 일괄 변경 신청 생성 (REQUEST_TYPE='UPDATE')
 
