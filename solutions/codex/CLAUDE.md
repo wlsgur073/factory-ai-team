@@ -52,6 +52,10 @@
 4. @nexus/codex-web 라우트 + 컴포넌트
 ```
 
+## Claude 워크플로우
+
+- **구현 시작 전**: `.claude/rules/` 디렉토리의 모든 규칙 문서를 확인하고 따를 것
+
 ## Codex 기술 스택 (플랫폼 공통 외)
 
 - **서버 상태**: TanStack Query v5

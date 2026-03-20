@@ -86,5 +86,6 @@ factory-ai-team/
 
 ## Claude 워크플로우
 
+- **구현 시작 전**: `.claude/rules/` 디렉토리의 모든 규칙 문서를 확인하고 따를 것
 - Before each task: run `superpowers:brainstorming`
 - When creating or modifying frontend UI components/pages: run `frontend-design:frontend-design` skill
