@@ -552,7 +552,7 @@ interface User extends BaseEntity {
 type UserRole =
   | "SYSTEM_ADMIN" // 시스템관리자
   | "REVIEWER_APPROVER" // 검토/승인자
-  | "DATA_STEWARD" // 표준 관리자
+  | "STD_MANAGER" // 표준 관리자
   | "REQUESTER" // 신청자
   | "READ_ONLY"; // 조회전용
 
@@ -1857,20 +1857,20 @@ interface GovernanceKpi {
 
 **역할별 CRUD 권한 매트릭스:**
 
-| 메뉴          | SYSTEM_ADMIN | REVIEWER_APPROVER | DATA_STEWARD | REQUESTER | READ_ONLY |
-| ------------- | :----------: | :---------------: | :----------: | :-------: | :-------: |
-| 대시보드      |     CRUD     |         R         |      R       |     R     |     R     |
-| 통합 탐색기   |     CRUD     |         R         |      R       |     R     |     R     |
-| 표준 조회     |     CRUD     |         R         |      R       |     R     |     R     |
-| 표준 신청     |     CRUD     |         R         |      CR      |    CR     |     -     |
-| 신청 목록     |     CRUD     |         R         |      R       |     R     |     -     |
-| 승인 처리     |     CRUD     |       CRUD        |      R       |     -     |     -     |
-| 초안 관리     |     CRUD     |        CR         |      CR      |    CR     |     -     |
-| 검증          |     CRUD     |         R         |      R       |     R     |     R     |
-| 감사 추적     |     CRUD     |         R         |      R       |     R     |     -     |
-| 공통코드 관리 |     CRUD     |         R         |     CRUD     |     -     |     -     |
-| 사용자 관리   |     CRUD     |         -         |      -       |     -     |     -     |
-| 시스템 설정   |     CRUD     |         -         |      -       |     -     |     -     |
+| 메뉴          | SYSTEM_ADMIN | REVIEWER_APPROVER | STD_MANAGER | REQUESTER | READ_ONLY |
+| ------------- | :----------: | :---------------: | :---------: | :-------: | :-------: |
+| 대시보드      |     CRUD     |         R         |      R      |     R     |     R     |
+| 통합 탐색기   |     CRUD     |         R         |      R      |     R     |     R     |
+| 표준 조회     |     CRUD     |         R         |      R      |     R     |     R     |
+| 표준 신청     |     CRUD     |         R         |     CR      |    CR     |     -     |
+| 신청 목록     |     CRUD     |         R         |      R      |     R     |     -     |
+| 승인 처리     |     CRUD     |       CRUD        |      R      |     -     |     -     |
+| 초안 관리     |     CRUD     |        CR         |     CR      |    CR     |     -     |
+| 검증          |     CRUD     |         R         |      R      |     R     |     R     |
+| 감사 추적     |     CRUD     |         R         |      R      |     R     |     -     |
+| 공통코드 관리 |     CRUD     |         R         |    CRUD     |     -     |     -     |
+| 사용자 관리   |     CRUD     |         -         |      -      |     -     |     -     |
+| 시스템 설정   |     CRUD     |         -         |      -      |     -     |     -     |
 
 > R=조회, C=등록, U=수정, D=삭제, -=접근불가
 

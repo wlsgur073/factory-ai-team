@@ -1132,19 +1132,19 @@ export function useRole() {
   const role = user?.role;
 
   return {
-    canRequest: ["SYSTEM_ADMIN", "DATA_STEWARD", "REQUESTER"].includes(
+    canRequest: ["SYSTEM_ADMIN", "STD_MANAGER", "REQUESTER"].includes(
       role ?? "",
     ),
     canApprove: ["SYSTEM_ADMIN", "REVIEWER_APPROVER"].includes(role ?? ""),
     canManage: role === "SYSTEM_ADMIN",
-    // DATA_STEWARD도 공통코드 관리 접근 가능
-    canManageCommonCodes: ["SYSTEM_ADMIN", "DATA_STEWARD"].includes(role ?? ""),
+    // STD_MANAGER도 공통코드 관리 접근 가능
+    canManageCommonCodes: ["SYSTEM_ADMIN", "STD_MANAGER"].includes(role ?? ""),
     canViewGovernance: [
       "SYSTEM_ADMIN",
       "REVIEWER_APPROVER",
-      "DATA_STEWARD",
+      "STD_MANAGER",
     ].includes(role ?? ""),
-    canExecuteValidation: ["SYSTEM_ADMIN", "DATA_STEWARD"].includes(role ?? ""),
+    canExecuteValidation: ["SYSTEM_ADMIN", "STD_MANAGER"].includes(role ?? ""),
     isReadOnly: role === "READ_ONLY",
     // 대시보드 뷰 분기: 승인자/관리자 → approver, 그 외 → requester
     isApproverView: ["SYSTEM_ADMIN", "REVIEWER_APPROVER"].includes(role ?? ""),
@@ -1228,7 +1228,7 @@ const menuConfig = [
         href: "/admin/common-codes",
         label: "공통코드 관리",
         icon: Settings2,
-        show: canManageCommonCodes, // DATA_STEWARD도 접근 가능
+        show: canManageCommonCodes, // STD_MANAGER도 접근 가능
       },
       {
         href: "/admin/users",
