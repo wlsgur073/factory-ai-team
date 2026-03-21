@@ -77,12 +77,15 @@ factory-ai-team/
 
 ## 중요 컨텍스트
 
+- **Nexus 비전**: Nexus는 통일된 UI 셸이 아니라 **솔루션 간 데이터/기능을 연결하는 허브(연결체)**. 각 솔루션은 고유한 로고, 헤더, 사이드바, 레이아웃을 가짐
+- **PlatformShell**: Platform 앱(솔루션 포탈/런처) 전용. 솔루션 앱에서 사용하지 않음
 - **브랜드**: 플랫폼명 "Nexus", 대시보드 "Command Center"
-- **솔루션 추가 방법**: `packages/config/src/solutions.ts`의 `solutions` 배열에 항목을 추가하면 카탈로그, 사이드바, 상세 페이지에 자동 반영
+- **솔루션 추가 방법**: `packages/config/src/solutions.ts`의 `solutions` 배열에 항목을 추가하면 카탈로그에 자동 반영
 - **등록 솔루션**: Codex (active, 데이터 거버넌스), AI Factory, Data Pipeline, CI/CD Hub, Insight Dashboard, LLM Gateway
 - **인증**: 미구현 (플레이스홀더만 존재)
 - **경로 별칭**: 앱 내부에서만 `@/*` → `./src/*` (tsconfig paths). 패키지 간 참조는 `@nexus/*`
 - **패키지 의존성, 아키텍처 규칙**: `.claude/rules/architecture.md` 참조
+- **향후 구조**: 각 솔루션을 별도 GitHub repo로 분리 (polyrepo). 공유 패키지는 npm 레지스트리 발행
 
 ## Git 워크플로우
 
@@ -91,8 +94,10 @@ factory-ai-team/
 
 ## Claude 워크플로우
 
-- **구현 시작 전**: `.claude/rules/` 디렉토리의 모든 규칙 문서를 확인하고 따를 것
-- **다중 Phase 구현 계획 실행 시**: team-leader 에이전트에게 위임할 것
+- **구현 작업 요청 시**: 반드시 `.claude/rules/pre-development-checklist.md` 체크리스트를 수행한 후 사용자 승인을 받고 시작할 것. 문서 확인을 건너뛰지 말 것
+- **다중 Phase 구현 시**: Agent Teams(TeamCreate)로 팀을 구성하여 실행. 현재 세션이 team-lead 역할. Subagent 패턴 사용 금지
+- **에이전트 팀**: frontend-developer, backend-developer, package-developer, test-engineer, code-reviewer (5명)
+- **team-lead 규칙**: `.claude/rules/team-lead-workflow.md` 참조 (dispatch 프롬프트 구조, 순차/병렬 판단, 실패 처리, 재시도 상한)
 - **구현 완료 시**: 해당 솔루션/패키지의 CLAUDE.md "현재 구현 상태" 섹션을 갱신할 것
 - Before each task: run `superpowers:brainstorming`
 - When creating or modifying frontend UI components/pages: run `frontend-design:frontend-design` skill
