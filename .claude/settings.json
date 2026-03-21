@@ -38,7 +38,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx eslint --fix \"$CLAUDE_FILE_PATH\" 2>/dev/null || true",
+            "command": "pnpm exec eslint --fix \"$CLAUDE_FILE_PATH\" 2>/dev/null || true",
             "statusMessage": "Auto-linting edited file"
           }
         ]
@@ -50,7 +50,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"$CLAUDE_FILE_PATH\" | grep -qE '(pnpm-lock\\.yaml|\\.env)' && echo 'BLOCK: Do not directly edit lock files or .env' && exit 1 || true",
+            "command": "echo \"$CLAUDE_FILE_PATH\" | grep -qE '(pnpm-lock\\.yaml|(^|/)\\.env($|\\.))' && echo 'BLOCK: Do not directly edit lock files or .env' && exit 1 || true",
             "statusMessage": "Checking for protected files"
           }
         ]
