@@ -27,6 +27,7 @@ RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 COPY --from=builder /app/apps/platform/.next/standalone ./
 COPY --from=builder /app/apps/platform/.next/static ./apps/platform/.next/static
+COPY --from=builder /app/apps/platform/public ./apps/platform/public
 USER nextjs
 EXPOSE 5000
 ENV PORT=5000 HOSTNAME="0.0.0.0"

@@ -27,6 +27,7 @@ RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 COPY --from=builder /app/solutions/codex/web/.next/standalone ./
 COPY --from=builder /app/solutions/codex/web/.next/static ./solutions/codex/web/.next/static
+COPY --from=builder /app/solutions/codex/web/public ./solutions/codex/web/public
 USER nextjs
 EXPOSE 5001
 ENV PORT=5001 HOSTNAME="0.0.0.0"
