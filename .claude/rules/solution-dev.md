@@ -30,19 +30,20 @@ solutions/{id}/
 
 ## 레이아웃 패턴
 
-- `web/src/app/layout.tsx`에서 `PlatformShell`로 children을 래핑
-- `TooltipProvider > PlatformShell > {children}` 순서 유지
+- 각 솔루션은 자체 레이아웃을 소유 — PlatformShell은 Platform 앱 전용이므로 사용하지 않음
+- 최소 구조: `TooltipProvider > {children}` (필요 시 자체 Header/Sidebar 추가)
 - metadata의 title 형식: `"{name} — Nexus"`
 
 ## 의존성 규칙
 
-- 플랫폼 패키지: `@nexus/shell`, `@nexus/ui`, `@nexus/config`, `@nexus/types`
+- 플랫폼 패키지: `@nexus/ui`, `@nexus/config`, `@nexus/types`
+- `@nexus/shell`은 Platform 앱 전용 — 솔루션에서는 사용하지 않음
 - 솔루션 내부 패키지: `@nexus/{id}-models`, `@nexus/{id}-shared`
 - 다른 솔루션 패키지 의존 금지
 
 ## 포트 할당
 
-- platform: 3000, codex: 3001, 이후 솔루션: 3002~
+- platform: 5000, codex: 5001, 이후 솔루션: 5002~
 - `web/package.json`의 `dev` 스크립트에 `--port {port}` 지정
 
 ## 릴리즈 노트
