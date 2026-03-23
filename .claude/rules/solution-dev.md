@@ -43,7 +43,7 @@ solutions/{id}/
 
 ## 포트 할당
 
-- platform: 3000, codex: 3001, 이후 솔루션: 3002~
+- platform: 5000, codex: 5001, 이후 솔루션: 5002~
 - `web/package.json`의 `dev` 스크립트에 `--port {port}` 지정
 
 ## 릴리즈 노트

@@ -28,6 +28,6 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --from=builder /app/solutions/codex/web/.next/standalone ./
 COPY --from=builder /app/solutions/codex/web/.next/static ./solutions/codex/web/.next/static
 USER nextjs
-EXPOSE 3001
-ENV PORT=3001 HOSTNAME="0.0.0.0"
+EXPOSE 5001
+ENV PORT=5001 HOSTNAME="0.0.0.0"
 CMD ["node", "solutions/codex/web/server.js"]
